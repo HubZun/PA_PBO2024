@@ -1,7 +1,10 @@
 
-import java.sql.*;
-import javax.swing.*;
-
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import java.sql.Statement;
+import user.customer;
 
 
 public class signUpForm extends javax.swing.JFrame {
@@ -124,6 +127,7 @@ public class signUpForm extends javax.swing.JFrame {
         String username,password,confirmPassword;
         boolean ketemu = false;
         
+
         username = txtUsername.getText();
         password = txtPassword.getText();
         confirmPassword = txtConfirmPassword.getText();
@@ -155,6 +159,29 @@ public class signUpForm extends javax.swing.JFrame {
                     try {
                         query = "insert into tbuser (username,password) values('"+username+"','"+password+"')";
                         st.executeUpdate(query);
+                        
+                        
+                        String user1 = "", pass1 = "";
+                        int id = 0;
+                        try{
+                            query = "select * from tbuser where username = '"+username+"'";
+                            rs = st.executeQuery(query);
+                            
+                            while(rs.next()){
+                                id = rs.getInt("id_user");
+                                user1 = rs.getString("username");
+                                pass1   = rs.getString("password");
+                            }
+                            
+                            customer cs = new customer(id,user1,pass1);
+                            System.out.println(cs.getId());
+                            System.out.println(cs.getUsername());
+                            System.out.println(cs.getPassword());
+
+                        }catch(Exception e){
+                            System.out.println(e);
+                        }
+
                         JOptionPane.showMessageDialog(null, "akun berhasil dibuat");
                         con.close();
                         

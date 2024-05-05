@@ -1,5 +1,8 @@
-import java.sql.*;
-import javax.swing.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import java.sql.Statement;
 
 public class loginForm extends javax.swing.JFrame {
 
