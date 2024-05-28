@@ -1,12 +1,19 @@
 package items;
 
 public class itemEkios {
-    private int idItem;
+    private String idItem;
     private int hargaItem;
     private String namaItem;
     private String jenisItem;
 
-    public int getIdItem() {
+    public itemEkios(String idItem,String namaItem,  String jenisItem ,int hargaItem ) {
+        this.idItem = idItem;
+        this.hargaItem = hargaItem;
+        this.namaItem = namaItem;
+        this.jenisItem = jenisItem;
+    }
+
+    public String getIdItem() {
         return idItem;
     }
 
