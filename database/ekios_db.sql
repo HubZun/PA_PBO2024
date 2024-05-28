@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 28, 2024 at 01:54 PM
+-- Generation Time: May 28, 2024 at 05:03 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -50,16 +50,17 @@ INSERT INTO `tbproduk` (`id_produk`, `nama_produk`, `jenis_produk`, `harga_produ
 CREATE TABLE `tbuser` (
   `id_user` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL
+  `password` varchar(50) NOT NULL,
+  `saldo` int(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbuser`
 --
 
-INSERT INTO `tbuser` (`id_user`, `username`, `password`) VALUES
-(5, 'admin', 'admin'),
-(18, 'fadlan', '123');
+INSERT INTO `tbuser` (`id_user`, `username`, `password`, `saldo`) VALUES
+(5, 'admin', 'admin', 0),
+(18, 'fadlan', '123', 200000);
 
 --
 -- Indexes for dumped tables
