@@ -2,8 +2,8 @@ package user;
 
 
 public abstract class user{
-    private int id;
-    private String username,password;
+    protected int id;
+    protected String username,password;
 
     public user(int id,String username,String password){
         this.id = id;
