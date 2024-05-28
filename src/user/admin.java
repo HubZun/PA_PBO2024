@@ -157,7 +157,7 @@ public class admin extends user {
 
 
         } catch (Exception e) {
-        // TODO: handle exception
+        
 
             System.out.println(e);
         }
@@ -291,6 +291,43 @@ public class admin extends user {
     public void melihatRiwayatTransaksi(){}
 
 
+    public static void melihatMember()
+    {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            
+            Connection con = DriverManager.getConnection(url,user,pass);
+            String query = "SELECT * FROM tbuser";
+
+            Statement st = con.createStatement();
+            ResultSet rs =  st.executeQuery(query);
+            System.out.println("------------------------------------------");
+            System.out.printf("%-6s  %-6s  %5s %3s %n",  "ID", "Username", "Password", "role");
+            System.out.println("------------------------------------------");
+
+            while(rs.next()){
+                // data user dimasukkan ke dalam list (nanti)
+                // itemEkios itm = new itemEkios(rs.getString("id_produk"), rs.getString("nama_produk"), rs.getString("jenis_produk"), rs.getInt("harga_produk"));
+                // items.add(itm);
+
+                int id = rs.getInt("id_user");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+
+                System.out.printf("%-6s  %-6s %-10s %3s %n",  id, username, password, "...");
+               
+                // System.out.println(rs.getString("id_produk"));
+                
+            }
+            System.out.println("------------------------------------------");
+
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+    }
+
     public static void main(String[] args) throws IOException
     {
         try {
@@ -311,6 +348,7 @@ public class admin extends user {
                         managemenAtributEkios();  
                         break;
                     case 2 :
+                        melihatMember();
 
                         break;
                     case 3 :

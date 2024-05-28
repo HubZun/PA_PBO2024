@@ -5,4 +5,4 @@
 1. Rifai Ananda Ramadhana (2209106075)
 2. Brayen Tisra Sarira (2209106076)
 3. Alif Fadlan Badali (2209106077)
-4. Akhmad Nur Hidayat (2209106095)
+4. Akhmad Nur Hidayat (2209106092)
