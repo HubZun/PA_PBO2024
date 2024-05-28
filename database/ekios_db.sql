@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 05 Bulan Mei 2024 pada 16.23
--- Versi server: 10.4.28-MariaDB
--- Versi PHP: 8.2.4
+-- Generation Time: May 28, 2024 at 01:54 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,27 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tbuser`
+-- Table structure for table `tbproduk`
+--
+
+CREATE TABLE `tbproduk` (
+  `id_produk` varchar(100) NOT NULL,
+  `nama_produk` varchar(255) NOT NULL,
+  `jenis_produk` varchar(255) NOT NULL,
+  `harga_produk` int(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbproduk`
+--
+
+INSERT INTO `tbproduk` (`id_produk`, `nama_produk`, `jenis_produk`, `harga_produk`) VALUES
+('66D9', 'telkom', 'pulsa', 5000);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbuser`
 --
 
 CREATE TABLE `tbuser` (
@@ -34,7 +54,7 @@ CREATE TABLE `tbuser` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `tbuser`
+-- Dumping data for table `tbuser`
 --
 
 INSERT INTO `tbuser` (`id_user`, `username`, `password`) VALUES
@@ -46,17 +66,23 @@ INSERT INTO `tbuser` (`id_user`, `username`, `password`) VALUES
 --
 
 --
--- Indeks untuk tabel `tbuser`
+-- Indexes for table `tbproduk`
+--
+ALTER TABLE `tbproduk`
+  ADD PRIMARY KEY (`id_produk`);
+
+--
+-- Indexes for table `tbuser`
 --
 ALTER TABLE `tbuser`
   ADD PRIMARY KEY (`id_user`);
 
 --
--- AUTO_INCREMENT untuk tabel yang dibuang
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT untuk tabel `tbuser`
+-- AUTO_INCREMENT for table `tbuser`
 --
 ALTER TABLE `tbuser`
   MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
