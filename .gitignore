@@ -1,4 +1,7 @@
 *.class
-
+kebutuhanfungsional.txt
 /nbproject/private/
 /dist/
+.vscode
+/build
+
