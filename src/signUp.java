@@ -15,7 +15,7 @@ public class signUp {
         
         System.out.print("Masukkan username baru > ");
         username = br.readLine();
-        
+            
         System.out.print("Masukkan password baru > ");
         password = br.readLine();
         
