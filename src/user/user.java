@@ -11,7 +11,12 @@ public abstract class user{
         this.password = password;
     }
 
-    public void login(){}
+    public boolean login(String username, String password){
+        return true;
+    }
+    
+    
+    
     public void logout(){}
     public int getId() {
         return id;

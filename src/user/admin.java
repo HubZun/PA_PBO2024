@@ -36,26 +36,58 @@ public class admin extends user {
         return uuid;
         
     }
-    // @Override
-    // public void login(){}
+     @Override
+     public boolean login(String username, String password){
+         String db_username = "", db_password = "", db_role="";
+         try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
-    // @Override
-    // public void logout(){}
+            Connection con = DriverManager.getConnection(url,user,pass);
+            
+            String query = "select * from tbuser where username = '"+getUsername()+"'";
 
-    // @Override
-    // public int getId() {
-    //     return id;
-    // }
+            Statement st = con.createStatement();
+            
+           
+            ResultSet rs =  st.executeQuery(query);
 
-    // @Override
-    // public String getPassword() {
-    //     return password;
-    // }
+            while(rs.next()){
+                db_username = rs.getString("username");
+                db_password = rs.getString("password");
+                db_role = rs.getString("role");
+                }
+            
+            con.close();
+
+           if (username.equals(db_username) && password.equals(db_password) && db_role.equals("admin")){
+               return true;
+           }
+
+
+        } catch (Exception e) {
+            
+            System.out.println(e);
+        }
+         return false;
+     }
+
+     @Override
+     public void logout(){}
+
+     @Override
+     public int getId() {
+         return id;
+     }
+
+     @Override
+     public String getPassword() {
+         return password;
+     }
     
-    // @Override
-    // public String getUsername() {
-    //     return username;
-    // }
+     @Override
+     public String getUsername() {
+         return username;
+     }
     
 
     static void addProduk()
@@ -328,7 +360,7 @@ public class admin extends user {
 
     }
 
-    public static void main(String[] args) throws IOException
+    public void main(String[] args) throws IOException
     {
         try {
             while (true) {

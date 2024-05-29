@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class customer extends user {
@@ -29,9 +30,90 @@ public class customer extends user {
         this.saldo = Saldo;
     }
     
-    // @Override
-    // public void login(){}
+     @Override
+     public boolean login(String username, String password){
+         String db_username = "", db_password = "", db_role="";
+         try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
+            Connection con = DriverManager.getConnection(url,user,pass);
+            
+            String query = "select * from tbuser where username = '"+getUsername()+"'";
+
+            Statement st = con.createStatement();
+            
+           
+            ResultSet rs =  st.executeQuery(query);
+
+            while(rs.next()){
+                db_username = rs.getString("username");
+                db_password = rs.getString("password");
+                db_role = rs.getString("role");
+                }
+            
+            con.close();
+
+           if (username.equals(db_username) && password.equals(db_password) && db_role.equals("customer")){
+               return true;
+           }
+
+
+        } catch (Exception e) {
+            
+            System.out.println(e);
+        }
+         return false;
+     }
+
+     public boolean signUp(String username, String password){
+         String db_username = "", db_password = "";
+         try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            Connection con = DriverManager.getConnection(url,user,pass);
+            
+            String query = "select * from tbuser where username = '"+username+"'";
+
+            Statement st = con.createStatement();
+            
+           
+            ResultSet rs =  st.executeQuery(query);
+
+            while(rs.next()){
+                db_username = rs.getString("username");
+                }
+
+           if (username.equals(db_username)){
+               System.out.println("username telah digunakan, silahkan gunakan username yang lain");
+           }else{
+               try {
+                   
+                   Class.forName("com.mysql.cj.jdbc.Driver");
+
+                   con = DriverManager.getConnection(url,user,pass);
+                   
+                   query = "insert into tbuser (username, password, role,saldo) values('"+username+"','"+password+"', 'customer', '0')";
+                   
+                   st.executeUpdate(query);
+                   
+                   System.out.println("akun berhasil dibuat");
+                   
+                   con.close();
+                   
+                   return true;
+                   
+               } catch (Exception e) {
+                   System.out.println(e);
+               }
+           }
+
+        } catch (Exception e) {
+            
+            System.out.println(e);
+        }
+         return false;
+     }
+     
     // @Override
     // public void logout(){}
 
@@ -161,7 +243,7 @@ public class customer extends user {
 
     }
 
-    public static void main(String[] args)throws Exception{
+    public void main(String[] args)throws Exception{
         connectDb(); 
         while(true) {
             System.out.println("=================================");

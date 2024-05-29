@@ -173,10 +173,10 @@ public class signUpForm extends javax.swing.JFrame {
                                 pass1   = rs.getString("password");
                             }
                             
-                            customer cs = new customer(id,user1,pass1);
-                            System.out.println(cs.getId());
-                            System.out.println(cs.getUsername());
-                            System.out.println(cs.getPassword());
+//                            customer cs = new customer(id,user1,pass1);
+//                            System.out.println(cs.getId());
+//                            System.out.println(cs.getUsername());
+//                            System.out.println(cs.getPassword());
 
                         }catch(Exception e){
                             System.out.println(e);
