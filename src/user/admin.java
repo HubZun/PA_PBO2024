@@ -14,12 +14,6 @@ import java.util.ArrayList;
 import java.util.UUID;
 import java.util.List;
 
-
-
-// TODO
-// - cek ketika produk yg dimasukkan sama dengan sebelumnya maka tidak bisa
-
-
 public class admin extends user {
    
     private static InputStreamReader sr = new InputStreamReader(System.in);
@@ -30,13 +24,8 @@ public class admin extends user {
     private static ArrayList <itemEkios> items = new ArrayList<>(); // array sementara yg menampung data dari db
     private static List<String> list = new ArrayList<>();
    
-
-
     public admin(int id, String username, String password) {
         super(id, username, password);
-        // this.id = id;
-        // this.username = username;
-        // this.password = password;
     }
     
     public void cls()
@@ -63,7 +52,8 @@ public class admin extends user {
                 return uuid;
                
               } else {
-                randomUID();
+                randomUID(); // recursive statement
+
                 // do {
                 //   String data = rs.getString("emp_name");
                 //   System.out.println(data);
@@ -90,8 +80,6 @@ public class admin extends user {
         String query = "select * from tbuser where username = '"+getUsername()+"'";
 
         Statement st = con.createStatement();
-        
-        
         ResultSet rs =  st.executeQuery(query);
 
         while(rs.next()){
@@ -199,7 +187,7 @@ public class admin extends user {
         
     }
 
-    public static void addProduk() throws Exception {
+    private static void addProduk() throws Exception {
         try {
             
             
@@ -241,11 +229,19 @@ public class admin extends user {
                 String uid = randomUID();
                 System.out.print("nama produk : ");
                 String nama = br.readLine();
+                if (nama.equals("")){
+                    throw new IOException();
+
+                }
                 int jumlah;
                 while(true){
                     try{
                         System.out.print("jumlah item : ");
                         jumlah = Integer.parseInt(br.readLine());
+                        if(jumlah <= 0){
+                            System.out.println("jumlah tidak valid");
+                            continue;
+                        }
                         break;
                     }
                     catch(NumberFormatException e){
@@ -257,6 +253,10 @@ public class admin extends user {
                     try{
                         System.out.print("harga : ");
                         harga = Integer.parseInt(br.readLine());
+                        if(harga <= 0){
+                            System.out.println("harga tidak valid");
+                            continue;
+                        }
                         break;
                     }
                     catch(NumberFormatException e){
@@ -276,11 +276,16 @@ public class admin extends user {
     
                 System.out.println("berhasil ditambahkan ke db");
                 conn.close();
+                System.out.println("tekan enter untuk melanjutkan...");br.readLine();
     
             } catch (Exception e) {
                 
                 System.out.println(e);
             }
+
+        }catch ( IOException e  ) {
+            System.out.println("error input!");
+        
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -379,6 +384,7 @@ public class admin extends user {
                             throw new IOException();
 
                         }
+
                         itm.setNamaItem(nama);
                         // System.out.println(itm.getNamaItem());
 
@@ -416,6 +422,8 @@ public class admin extends user {
                             System.out.println(kat);
                             kategori = kat;
 
+                                               
+                           
                         }else{
                             System.out.print("Masukkan Kategori : ");
                             kategori = br.readLine();
@@ -431,8 +439,23 @@ public class admin extends user {
 
 
 
-                        System.out.print("harga : ");
-                        int harga = Integer.parseInt(br.readLine());
+                        int harga;
+                        while(true){
+                            try{
+                                System.out.print("harga : ");
+                                harga = Integer.parseInt(br.readLine());
+                                if(harga <= 0){
+                                    System.out.println("harga tidak valid");
+                                    continue;
+                                }
+                                break;
+                            }
+                            catch(NumberFormatException e){
+                                System.out.println("Inputan Harus Angka!");
+                            }
+                        }
+                        // System.out.print("harga : ");
+                        // int harga = Integer.parseInt(br.readLine());
                        
                         itm.setHargaItem(harga);
                    
@@ -449,6 +472,7 @@ public class admin extends user {
 
                         System.out.println("berhasil di update");
                         con.close();
+                        System.out.println("tekan enter untuk melanjutkan...");br.readLine();
                         
                     }
                 }
@@ -495,11 +519,14 @@ public class admin extends user {
 
                         System.out.println("berhasil dihapus");
                         con.close();
+                        System.out.println("tekan enter untuk melanjutkan...");br.readLine();
+
                         return;
                     }
                 }
                 // jika "hapus" tidak ada di data
                 System.out.println("data tidak ada!");
+                System.out.println("tekan enter untuk melanjutkan...");br.readLine();
 
             }
 
@@ -514,7 +541,7 @@ public class admin extends user {
 
 
 
-    public void managemenAtributEkios() throws Exception
+    private void managemenAtributEkios() throws Exception
     {
         try {
             
@@ -533,6 +560,8 @@ public class admin extends user {
             switch (pilih) {
                 case 1:
                     lihatProduk();
+                    System.out.println("tekan enter untuk melanjutkan...");br.readLine();
+
                     break;
                 case 2:
                     addProduk();
@@ -565,7 +594,47 @@ public class admin extends user {
 
 
     // RIWAYAT TRANSAKSI
-    public static void melihatRiwayatTransaksi(){}
+    public static void melihatRiwayatTransaksi()
+    {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            
+            Connection con = DriverManager.getConnection(url,user,pass);
+            String query = "SELECT * FROM transaksi";
+
+            Statement st = con.createStatement();
+            ResultSet rs =  st.executeQuery(query);
+
+            if (rs.next() == false) {
+                System.out.println("tidak ada data!");
+                System.out.println("tekan enter untuk melanjutkan...");br.readLine();
+                return;
+                           
+            }else{
+                System.out.println("------------------------------------------");
+                System.out.printf("%3s  %-5s  %-12s  %-10s %-6s  %n", "ID trx", "Id user", "id produk", "tanggal", "total harga");
+                System.out.println("------------------------------------------");
+
+                do{
+                    int id_trx = rs.getInt("id_transaksi");
+                    int id_user = rs.getInt("id_user");
+                    int id_produk = rs.getInt("id_produk");
+                    String tanggal = rs.getDate("tanggal").toString();
+                    int harga = rs.getInt("total_harga");
+                    System.out.printf("%-8d  %-6s  %-8s %-10s %-8d %n", id_trx, id_user, id_produk, tanggal, harga);
+
+
+                }while(rs.next());
+                System.out.println("------------------------------------------");
+
+                System.out.println("tekan enter untuk melanjutkan...");br.readLine();
+
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
 
 
     // LIHAT LIST MEMBER
@@ -598,6 +667,7 @@ public class admin extends user {
             }
             System.out.println("------------------------------------------");
 
+            System.out.println("tekan enter untuk melanjutkan...");br.readLine();
 
         } catch (Exception e) {
             System.out.println(e);
@@ -613,7 +683,7 @@ public class admin extends user {
 
             while (true) {
                 
-                cls();
+                // cls();
 
                 System.out.println(randomUID());
                 
