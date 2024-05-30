@@ -22,6 +22,7 @@ public class admin extends user {
     private static final String user = "root";
     private static final String pass = "";
     private static ArrayList <itemEkios> items = new ArrayList<>(); // array sementara yg menampung data dari db
+    
     private static List<String> list = new ArrayList<>();
    
     public admin(int id, String username, String password) {
@@ -53,12 +54,6 @@ public class admin extends user {
                
               } else {
                 randomUID(); // recursive statement
-
-                // do {
-                //   String data = rs.getString("emp_name");
-                //   System.out.println(data);
-                // } while (rs.next());
-
               }
 
 
@@ -618,7 +613,7 @@ public class admin extends user {
                 do{
                     int id_trx = rs.getInt("id_transaksi");
                     int id_user = rs.getInt("id_user");
-                    int id_produk = rs.getInt("id_produk");
+                    String id_produk = rs.getString("id_produk");
                     String tanggal = rs.getDate("tanggal").toString();
                     int harga = rs.getInt("total_harga");
                     System.out.printf("%-8d  %-6s  %-8s %-10s %-8d %n", id_trx, id_user, id_produk, tanggal, harga);
