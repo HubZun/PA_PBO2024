@@ -10,7 +10,6 @@ import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 
 public class customer extends user {
@@ -50,6 +49,7 @@ public class customer extends user {
                 db_username = rs.getString("username");
                 db_password = rs.getString("password");
                 db_role = rs.getString("role");
+                saldo = rs.getInt("saldo");
                 db_id = rs.getInt("id_user");
                 }
             
@@ -141,60 +141,70 @@ public class customer extends user {
     }
 
     public void akun() throws IOException {
+        System.out.print("\033\143");
         System.out.println("===========================");
         System.out.println("|      Akun Customer      |");
         System.out.println("===========================");
+        System.out.println("| Id       : " + this.id);
         System.out.println("| Username : " + this.username);
-        System.out.println("| Id : " + this.id);
         System.out.println("| Password : " + this.password);
         System.out.println("| Saldo    : " + this.saldo);
         System.out.println("===========================");
-        
+        System.out.print("Tekan Enter Untuk Melanjutkan..."); br.readLine(); 
     }
 
     public void saldo() throws Exception {
+        System.out.print("\033\143");
         System.out.println("===========================");
         System.out.println("|      Saldo Customer     |");
         System.out.println("===========================");
         System.out.println("| Saldo    : " + this.saldo);
         System.out.println("===========================");
+        int topup;
         while (true) {
-            System.out.print("Masukkan jumlah saldo yang ingin di topup : ");
-            int topup = Integer.parseInt(br.readLine());
+            while (true) {
+                try {
+                    System.out.print("Masukkan jumlah saldo yang ingin di topup : ");
+                    topup = Integer.parseInt(br.readLine());
+                    if(topup <= 0){
+                        System.out.println("Masukkan jumlah saldo lebih dari 0");
+                    }
+                    else{
+                        break;
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Inputan Harus Berupa Integer!");
+                }
+            }
+            
             System.out.print("Yakin ingin topup (y/n):");
             String cek = br.readLine();
             if(cek.equals("y")){
-                setSaldo(topup);
-                Class.forName("com.mysql.cj.jdbc.Driver");
+                int saldoS = getSaldo();
+                setSaldo(saldoS+topup);
+                updateSaldo();
 
-                Connection con = DriverManager.getConnection(url,user,pass);
-                
-                String query = "UPDATE tbuser SET saldo = '"+ getSaldo() +"' WHERE id_user = '"+ getId() +"'";
-
-                Statement st = con.createStatement();
-                st.executeUpdate(query);
-
-                System.out.println("berhasil di update");
-                con.close();
+                System.out.println("Topup Saldo Berhasil...");
                 break;
             }
             else{
                 break;
             }
         }
+        System.out.print("Tekan Enter Untuk Melanjutkan..."); br.readLine();
     }
+    private void updateSaldo() throws Exception{
+        Class.forName("com.mysql.cj.jdbc.Driver");
 
-    public void topup() throws IOException {
-        System.out.println("===========================");
-        System.out.println("|      Saldo Customer     |");
-        System.out.println("===========================");
-        System.out.println("| Saldo    : " + this.saldo);
-        System.out.println("===========================");
+        Connection con = DriverManager.getConnection(url,user,pass);
+        
+        String query = "UPDATE tbuser SET saldo = '"+ getSaldo() +"' WHERE id_user = '"+ getId() +"'";
+
+        Statement st = con.createStatement();
+        st.executeUpdate(query);
+
+        con.close();
     }
-
-
-
-
 
     // ambil data dari table produk
     private static void insertToList()
@@ -247,8 +257,6 @@ public class customer extends user {
         }
     }
 
-
-
     private static void insertKategoriToList() throws Exception
     {
         try {
@@ -275,16 +283,14 @@ public class customer extends user {
         
     }
 
-
-
-    private static void insertTransaksi()
+    private void insertTransaksi()
     {
         try {
             riwayat.clear();
             Class.forName("com.mysql.cj.jdbc.Driver");
-            
+            int x = getId();
             Connection con = DriverManager.getConnection(url,user,pass);
-            String query = "SELECT * FROM transaksi INNER JOIN tbuser ON transaksi.id_user = tbuser.id_user INNER JOIN tbproduk ON transaksi.id_produk = tbproduk.id_produk;";
+            String query = "SELECT * FROM transaksi INNER JOIN tbuser ON transaksi.id_user = tbuser.id_user INNER JOIN tbproduk ON transaksi.id_produk = tbproduk.id_produk WHERE transaksi.id_user = '"+x+"'";
 
             Statement st = con.createStatement();
             ResultSet rs =  st.executeQuery(query);
@@ -293,6 +299,7 @@ public class customer extends user {
                 riwayatPembelian rbl = new riwayatPembelian(rs.getInt("id_transaksi"), rs.getString("username"), rs.getString("nama"), rs.getString("tanggal"), rs.getInt("total_harga"));
                 riwayat.add(rbl);
             }
+            con.close();
             
         } catch (Exception e) {
             System.out.println(e);
@@ -313,15 +320,22 @@ public class customer extends user {
             }
             System.out.println("|99. Kembali");
             System.out.println("====================================");
-            System.out.print("Masukkan pilihan kategori : ");
-            int topup = Integer.parseInt(br.readLine());
+            int topup;
+            while (true) {
+                try {
+                    System.out.print("Masukkan pilihan kategori : ");
+                    topup = Integer.parseInt(br.readLine());
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println("Inputan Harus Berupa Integer!");
+                }
+            }
             try {
                 if (topup == 99) {
                     break;
                 }
                 String kategori;
                 String kat = list.get(topup-1);
-                System.out.println(kat);
                 kategori = kat;
                 Class.forName("com.mysql.cj.jdbc.Driver");
             
@@ -331,32 +345,62 @@ public class customer extends user {
                 Statement st = con.createStatement();
                 ResultSet rs =  st.executeQuery(query);
                 int id = 0;
+                System.out.println("============================");
+                System.out.println("       "+ kategori);
+                System.out.println("============================");
                 while(rs.next()){
                     String jumlah = rs.getString("jumlah");
                     Integer harga = rs.getInt("harga");
-                    System.out.print(id += 1);
+                    System.out.print("| "+ (id += 1) + ".");
                     System.out.print(" " + jumlah);
-                    System.out.println(" "+harga);
+                    System.out.println("    "+harga);
                 }
+                System.out.println("============================");
                 rs.close();
 
                 ResultSet rs2 =  st.executeQuery(query);
                 int ids = 0;
-                System.out.print("Pilih Produk Yang Ingin Dibeli "); int produk = Integer.parseInt(br.readLine());
+                int produk;
+                while (true) {
+                    try {
+                        System.out.print("Pilih Produk Yang Ingin Dibeli >> "); 
+                        produk = Integer.parseInt(br.readLine());
+                        break;
+                    } catch (NumberFormatException e) {
+                        System.out.println("Inputan Harus Berupa Integer!");
+                    }
+                }
+                
                 while(rs2.next()){
                     ids += 1;
                     if (produk == ids){
                         Integer harga = rs2.getInt("harga");
-                        int total = this.saldo - harga;
-                        LocalDate myLocalDate = LocalDate.now();
-                        String queryy = "INSERT INTO transaksi (id_user, id_produk, tanggal, total_harga) values ('"+ this.id +"', '"+ rs2.getString("id_produk") +"', '"+ myLocalDate +"', '"+ total +"' )";
-                        // riwayatPembelian rbl = new riwayatPembelian(rs.getInt("id_transaksi"), rs.getString("username"), rs.getString("nama"), rs.getString("tanggal"), rs.getInt("total_harga"));
-                        Statement stt = con.createStatement();
-                        stt.executeUpdate(queryy);
-                        
-                        System.out.print("berhasil ditambahkan ke db");
-                        br.readLine();
-                        break;
+                        System.out.println("Harga Produk >> Rp."+harga);
+                        System.out.println("Jumlah Saldo Anda : "+getSaldo());
+                        System.out.println("===============================");
+                        System.out.print("Ingin Melakukan Pembayaran (y/n) >> ");
+                        String bayar = br.readLine();
+                        if(bayar.equals("y")){
+                            int total = this.saldo - harga;
+                            if(total < 0){
+                                System.out.println("Saldo Anda Tidak Mencukupi Silahkan Isi Kembali Saldo");
+                            }
+                            else{
+                                LocalDate myLocalDate = LocalDate.now();
+                                String queryy = "INSERT INTO transaksi (id_user, id_produk, tanggal, total_harga) values ('"+ this.id +"', '"+ rs2.getString("id_produk") +"', '"+ myLocalDate +"', '"+ total +"' )";
+                                Statement stt = con.createStatement();
+                                stt.executeUpdate(queryy);
+                                setSaldo(total);
+                                updateSaldo();
+                                System.out.println("berhasil Melakukan Pembelian...");
+                                System.out.println("Sisa Saldo Anda : "+ getSaldo());
+                                br.readLine();
+                                break;
+                            }
+                        }
+                        else{
+                            return;
+                        }
                     }
                 }
                 
@@ -369,9 +413,9 @@ public class customer extends user {
         }
     }
 
-
-    public void main(String[] args)throws Exception{
+    public void menu()throws Exception{
         while(true) {
+            System.out.print("\033\143");
             System.out.println("=================================");
             System.out.println("|          Menu Customer        |");
             System.out.println("=================================");
@@ -381,8 +425,16 @@ public class customer extends user {
             System.out.println("| 4. Riwayat Transaksi          |");
             System.out.println("| 0. Log Out                    |");
             System.out.println("=================================");
-            System.out.print("Masukkan Menu Pilihan Anda : ");
-            int menuC = Integer.parseInt(br.readLine());
+            int menuC;
+            while (true) {
+                try {
+                    System.out.print("Masukkan Menu Pilihan Anda : ");
+                    menuC = Integer.parseInt(br.readLine());
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println("Inputan Harus Berupa Integer!");
+                }
+            }
             switch (menuC) {
                 case 1:
                     akun();
@@ -398,21 +450,21 @@ public class customer extends user {
                         System.out.println("=================================");
                         System.out.println("| 1. Lihat Produk               |");
                         System.out.println("| 2. Beli Produk                |");
-                        System.out.println("| 9. Kembali                    |");
+                        System.out.println("| 0. Kembali                    |");
                         System.out.println("=================================");
+                        System.out.print("| Masukkan Menu Pilihan Anda : ");
                         String pilih = br.readLine();
                         if (pilih.equals("1")){
                             lihatProduk();
                             System.out.print("Tekan Apa Saja Untuk Melanjutkan...."); br.readLine();
                         }
                         else if (pilih.equals("2")){
-                            // transaksi();
                             insertKategoriToList();
                             transaksi();
                             System.out.print("Tekan Apa Saja Untuk Melanjutkan...."); br.readLine();
                         }
-                        else if (pilih.equals("9")){
-                            break;
+                        else if (pilih.equals("0")){
+                            menu();
                         }
                     }
                 case 4:
@@ -423,12 +475,19 @@ public class customer extends user {
                         String produk = rwy.getIdProduk();
                         String tanggal = rwy.getTanggal();
                         int total = rwy.getTotal();
+                        System.out.println("=======================================");
+                        System.out.println("|          Riwayat Pembelian          |");
                         if (username.equals(user)){
-                            System.out.println(user);
-                            System.out.println(produk);
-                            System.out.println(tanggal);
-                            System.out.println(total);
-                        } 
+                            System.out.println("=======================================");
+                            System.out.println("| NO                : "+ (i+1));
+                            System.out.println("| Nama User         : "+user);
+                            System.out.println("| Nama Produk       : "+produk);
+                            System.out.println("| Tanggal Pembelian : "+tanggal);
+                            System.out.println("| Total Harga       : "+total);
+                            System.out.println("=======================================");
+                        }
+                        System.out.print("Tekan Apa Saja Untuk Melanjutkan...."); br.readLine();
+                        menu(); 
                     }  
                 case 0:
                     return;
@@ -439,5 +498,4 @@ public class customer extends user {
         }
     }
 }
-
 
