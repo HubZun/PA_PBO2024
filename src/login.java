@@ -17,17 +17,18 @@ public class login {
         customer cs;
         
         while (true){
-            System.out.println("======= login page ========");
-            System.out.println("1. login");
-            System.out.println("2. sign up");
-            System.out.println("3. exit");
-            System.out.print("silahkan pilih menu > ");
+            System.out.println("======= Login Page ========");
+            System.out.println("| 1. login                |");
+            System.out.println("| 2. sign up              |");
+            System.out.println("| 3. exit                 |");
+            System.out.println("===========================");
+            System.out.print("| silahkan pilih menu >> ");
             pilih = br.readLine();
             
             if (pilih.equals("1")){
-                System.out.print("masukkan username > ");
+                System.out.print("| masukkan username >> ");
                 username = br.readLine();
-                System.out.print("masukkan password > ");
+                System.out.print("| masukkan password >> ");
                 password = br.readLine();
                 
                 ad = new admin(0,username,password);
@@ -37,8 +38,7 @@ public class login {
                     ad.main(args);
                 }else{
                     if (cs.login(username,password)) {
-                    cs.main(args);
-                    
+                        cs.menu();
                     }else{
                         System.out.println("gagal");
                     }
