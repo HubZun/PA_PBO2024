@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 29, 2024 at 05:27 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Waktu pembuatan: 31 Bulan Mei 2024 pada 06.10
+-- Versi server: 10.4.28-MariaDB
+-- Versi PHP: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbproduk`
+-- Struktur dari tabel `tbproduk`
 --
 
 CREATE TABLE `tbproduk` (
@@ -38,7 +38,7 @@ CREATE TABLE `tbproduk` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbuser`
+-- Struktur dari tabel `tbuser`
 --
 
 CREATE TABLE `tbuser` (
@@ -50,24 +50,24 @@ CREATE TABLE `tbuser` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbuser`
+-- Dumping data untuk tabel `tbuser`
 --
 
 INSERT INTO `tbuser` (`id_user`, `username`, `password`, `saldo`, `role`) VALUES
 (5, 'admin', 'admin', 0, 'admin'),
-(18, 'fadlan', '123', 200000, 'customer'),
+(18, 'fadlan', '123', 10000, 'customer'),
 (19, 'rifai', '321', 0, 'customer');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `transaksi`
+-- Struktur dari tabel `transaksi`
 --
 
 CREATE TABLE `transaksi` (
   `id_transaksi` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
-  `id_produk` int(11) NOT NULL,
+  `id_produk` varchar(100) NOT NULL,
   `tanggal` date NOT NULL,
   `total_harga` int(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -77,19 +77,19 @@ CREATE TABLE `transaksi` (
 --
 
 --
--- Indexes for table `tbproduk`
+-- Indeks untuk tabel `tbproduk`
 --
 ALTER TABLE `tbproduk`
   ADD PRIMARY KEY (`id_produk`);
 
 --
--- Indexes for table `tbuser`
+-- Indeks untuk tabel `tbuser`
 --
 ALTER TABLE `tbuser`
   ADD PRIMARY KEY (`id_user`);
 
 --
--- Indexes for table `transaksi`
+-- Indeks untuk tabel `transaksi`
 --
 ALTER TABLE `transaksi`
   ADD PRIMARY KEY (`id_transaksi`),
@@ -97,20 +97,31 @@ ALTER TABLE `transaksi`
   ADD UNIQUE KEY `id_produk` (`id_produk`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `tbuser`
+-- AUTO_INCREMENT untuk tabel `tbuser`
 --
 ALTER TABLE `tbuser`
   MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
--- AUTO_INCREMENT for table `transaksi`
+-- AUTO_INCREMENT untuk tabel `transaksi`
 --
 ALTER TABLE `transaksi`
   MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
+--
+
+--
+-- Ketidakleluasaan untuk tabel `transaksi`
+--
+ALTER TABLE `transaksi`
+  ADD CONSTRAINT `transaksi_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `tbuser` (`id_user`),
+  ADD CONSTRAINT `transaksi_ibfk_2` FOREIGN KEY (`id_produk`) REFERENCES `tbproduk` (`id_produk`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
