@@ -66,13 +66,13 @@ public class admin extends user {
 
     @Override
     public boolean login(String username, String password){
-        String db_username = "", db_password = "", db_role="";
+        String db_username = "", db_password = "", db_role="", sha_password = "";
         try {
         Class.forName("com.mysql.cj.jdbc.Driver");
 
         Connection con = DriverManager.getConnection(url,user,pass);
         
-        String query = "select * from tbuser where username = '"+getUsername()+"'";
+        String query = "select * from tbuser where username = '"+username+"'";
 
         Statement st = con.createStatement();
         ResultSet rs =  st.executeQuery(query);
@@ -83,9 +83,20 @@ public class admin extends user {
             db_role = rs.getString("role");
             }
         
+
+        query = "select password from tbuser where password = SHA1('"+password+"')";
+
+        st = con.createStatement();
+
+        rs = st.executeQuery(query);
+
+        while (rs.next()) {
+            sha_password = rs.getString("password");
+        }
+
         con.close();
 
-        if (username.equals(db_username) && password.equals(db_password) && db_role.equals("admin")){
+        if (username.equals(db_username) && sha_password.equals(db_password) && db_role.equals("admin")){
             return true;
         }
 

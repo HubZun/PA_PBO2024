@@ -1,5 +1,6 @@
 import user.*;
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -12,21 +13,24 @@ public class login {
         String pilih, username, password;
         admin ad;
         customer cs;
-        
+        System.out.print("\033\143");
         while (true){
-            System.out.println("======= Login Page ========");
+            System.out.println("\n\n======= Login Page ========");
             System.out.println("| 1. login                |");
             System.out.println("| 2. sign up              |");
-            System.out.println("| 3. exit                 |");
+            System.out.println("| 0. exit                 |");
             System.out.println("===========================");
             System.out.print("| silahkan pilih menu >> ");
             pilih = br.readLine();
             
             if (pilih.equals("1")){
+                Console c = System.console();
+                
                 System.out.print("| masukkan username >> ");
                 username = br.readLine();
-                System.out.print("| masukkan password >> ");
-                password = br.readLine();
+                
+                char[] pass = c.readPassword("| masukkan password >> ");
+                password = new String(pass);
                 
                 ad = new admin(0,username,password);
                 cs = new customer(0, username, password, 0);
@@ -37,22 +41,21 @@ public class login {
                     if (cs.login(username,password)) {
                         cs.menu();
                     }else{
-                        System.out.println("gagal");
+                        System.out.println("\nusername dan password tidak ditemukan, coba lagi");
                     }
                 }
             }else if(pilih.equals("2")){
-                signUp su = new signUp();
                 
-                if (su.main(args)){
+                if (signUp.main(args)){
                     continue;
                 }else{
-                    System.out.println("gagal masuk ke menu customer");
+                    continue;
                 }
                 
             
             }
-            else if(pilih.equals("3")){
-                return;
+            else if(pilih.equals("0")){
+                System.exit(0);
             }
         
             
