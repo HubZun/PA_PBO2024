@@ -251,19 +251,21 @@ public class customer extends user {
                 System.out.println("data kosong");
                 return;
             } else {
-                System.out.println("------------------------------------------");
-                System.out.printf("%3s  %-5s  %-12s  %-10s %-6s %3s  %n", "No", "Id", "Nama produk", "Kategori", "Jumlah", "Harga");
-                System.out.println("------------------------------------------");
-                for (int i = 0; i < items.size(); i++) {
+                System.out.println("===========================================================================");
+                System.out.printf("| %3s  %-7s  %-15s  %-17s %-7s %10s  %n", "No", "Id", "Nama produk", "Kategori", "Jumlah" ,"Harga");
+                System.out.println("===========================================================================");
+
+                for(int i = 0; i < items.size(); i++){
                     itemEkios itm = items.get(i);
                     String id = itm.getIdItem();
                     String nama = itm.getNamaItem();
                     String kategori = itm.getKategori();
                     int harga = itm.getHargaItem();
                     int jumlah = itm.getJumlahItem();
-                    System.out.printf("%3d  %-2s  %-8s %-10s %-6d %3d %n", (i + 1), id, nama, kategori, jumlah, harga);
-                }
-                System.out.println("------------------------------------------");
+                    
+                    System.out.printf("|%3d  %-7s  %-15s %-17s %-7d %10d %n", (i+1), id, nama, kategori,jumlah,harga);
+                }  
+                System.out.println("===========================================================================");
             }
         } catch (Exception e) {
             System.out.println(e);

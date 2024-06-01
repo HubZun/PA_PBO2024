@@ -333,9 +333,9 @@ public class admin extends user {
                 return;
 
             }else{
-                System.out.println("------------------------------------------");
-                System.out.printf("%3s  %-5s  %-12s  %-10s %-6s %3s  %n", "No", "Id", "Nama produk", "Kategori", "Jumlah" ,"Harga");
-                System.out.println("------------------------------------------");
+                System.out.println("===========================================================================");
+                System.out.printf("| %3s  %-7s  %-15s  %-17s %-7s %10s  %n", "No", "Id", "Nama produk", "Kategori", "Jumlah" ,"Harga");
+                System.out.println("===========================================================================");
 
                 for(int i = 0; i < items.size(); i++){
                     itemEkios itm = items.get(i);
@@ -345,14 +345,13 @@ public class admin extends user {
                     int harga = itm.getHargaItem();
                     int jumlah = itm.getJumlahItem();
                     
-                    System.out.printf("%3d  %-2s  %-8s %-10s %-6d %3d %n", (i+1), id, nama, kategori,jumlah,harga);
+                    System.out.printf("|%3d  %-7s  %-15s %-17s %-7d %10d %n", (i+1), id, nama, kategori,jumlah,harga);
                     
 
                     
 
                 }  
-
-                System.out.println("------------------------------------------");
+                System.out.println("===========================================================================");
 
             
             }
@@ -555,13 +554,16 @@ public class admin extends user {
             cls();
 
             insertKategoriToList();
-            System.out.println("Produk");
-            System.out.println("1. lihat produk");
-            System.out.println("2. tambah produk");
-            System.out.println("3. ubah produk");
-            System.out.println("4. hapus produk");
-            System.out.println("0. kembali");
-            System.out.print("pilih :");
+            System.out.println("================================");
+            System.out.println("|           Produk             |");
+            System.out.println("================================");
+            System.out.println("| 1. lihat produk              |");
+            System.out.println("| 2. tambah produk             |");
+            System.out.println("| 3. ubah produk               |");
+            System.out.println("| 4. hapus produk              |");
+            System.out.println("| 0. kembali                   |");
+            System.out.println("================================");
+            System.out.print("| pilih : ");
             int pilih = Integer.parseInt(br.readLine());
             switch (pilih) {
                 case 1:
@@ -603,10 +605,12 @@ public class admin extends user {
     public static void melihatRiwayatTransaksi()
     {
         try {
+            
             Class.forName("com.mysql.cj.jdbc.Driver");
             
             Connection con = DriverManager.getConnection(url,user,pass);
-            String query = "SELECT * FROM transaksi";
+//            String query = "SELECT * FROM transaksi";
+            String query = "SELECT * FROM transaksi INNER JOIN tbuser ON transaksi.id_user = tbuser.id_user INNER JOIN tbproduk ON transaksi.id_produk = tbproduk.id_produk ";
 
             Statement st = con.createStatement();
             ResultSet rs =  st.executeQuery(query);
@@ -617,21 +621,21 @@ public class admin extends user {
                 return;
                            
             }else{
-                System.out.println("------------------------------------------");
-                System.out.printf("%3s  %-5s  %-12s  %-10s %-6s  %n", "ID trx", "Id user", "id produk", "tanggal", "total harga");
-                System.out.println("------------------------------------------");
+                System.out.println("=============================================================");
+                System.out.printf("%-6s  %-10s  %-10s  %-15s %-10s  %n", "Id trx", "Username", "id produk", "tanggal", "total harga");
+                System.out.println("=============================================================");
 
                 do{
                     int id_trx = rs.getInt("id_transaksi");
-                    int id_user = rs.getInt("id_user");
+                    String username = rs.getString("username");
                     String id_produk = rs.getString("id_produk");
                     String tanggal = rs.getDate("tanggal").toString();
                     int harga = rs.getInt("total_harga");
-                    System.out.printf("%-8d  %-6s  %-8s %-10s %-8d %n", id_trx, id_user, id_produk, tanggal, harga);
+                    System.out.printf(" %-6d  %-10s  %-10s %-15s %-10d %n", id_trx, username, id_produk, tanggal, harga);
 
 
                 }while(rs.next());
-                System.out.println("------------------------------------------");
+                System.out.println("=============================================================");
 
                 System.out.println("tekan enter untuk melanjutkan...");br.readLine();
 
@@ -654,9 +658,9 @@ public class admin extends user {
 
             Statement st = con.createStatement();
             ResultSet rs =  st.executeQuery(query);
-            System.out.println("------------------------------------------");
-            System.out.printf("%-6s  %-6s  %5s %3s %n",  "ID", "Username", "Password", "role");
-            System.out.println("------------------------------------------");
+            System.out.println("===================================");
+            System.out.printf("%-6s  %-10s %6s %n",  "ID", "Username", "role");
+            System.out.println("===================================");
 
             while(rs.next()){
                 // data user dimasukkan ke dalam list (nanti)
@@ -664,14 +668,13 @@ public class admin extends user {
 
                 int id = rs.getInt("id_user");
                 String username = rs.getString("username");
-                String password = rs.getString("password");
                 String role = rs.getString("role");
 
-                System.out.printf("%-6s  %-6s %-10s %3s %n",  id, username, password, role);
+                System.out.printf("%-6s  %-10s  %6s %n",  id, username, role);
  
                 
             }
-            System.out.println("------------------------------------------");
+            System.out.println("===================================");
 
             System.out.println("tekan enter untuk melanjutkan...");br.readLine();
 
@@ -699,13 +702,15 @@ public class admin extends user {
                 }
 
                 flag = false;
-                System.out.println("Menu :");
-                System.out.println("1. Produk"); // crud produk
-                System.out.println("2. Member"); // lihat data member/customer
-                System.out.println("3. Transaksi"); // lihat data transaksi
-                // System.out.println("4. Kategori"); // crud kategori
-                System.out.println("0. logout"); // exit to login
-                System.out.print("Pilih :");
+                System.out.println("==================================");
+                System.out.println("|           Menu Admin           |");
+                System.out.println("==================================");
+                System.out.println("| 1. Produk                      |"); // crud produk
+                System.out.println("| 2. Member                      |"); // lihat data member/customer
+                System.out.println("| 3. Transaksi                   |"); // lihat data transaksi
+                System.out.println("| 0. logout                      |"); // exit to login
+                System.out.println("==================================");
+                System.out.print("| Pilih : ");
                 int menu = Integer.parseInt(br.readLine());
 
                 switch (menu) {
