@@ -505,19 +505,19 @@ public class customer extends user {
                             lihatProduk();
                             System.out.print("Tekan Apa Saja Untuk Melanjutkan....");
                             br.readLine();
-                            break;
+                            
                         } else if (pilih.equals("2")) {
                             insertKategoriToList();
                             transaksi();
                             System.out.print("Tekan Apa Saja Untuk Melanjutkan....");
                             br.readLine();
-                            break;
+                            
                         } else if (pilih.equals("0")) {
-                            menu();
                             break;
+                            
                         }
-                        break;
                     }
+                    break;
                 case 4:
                     insertTransaksi();
                     for (int i = 0; i < riwayat.size(); i++) {
@@ -537,18 +537,16 @@ public class customer extends user {
                             System.out.println("| Total Harga       : " + total);
                             System.out.println("=======================================");
                         }
-                        System.out.print("Tekan Apa Saja Untuk Melanjutkan....");
-                        br.readLine();
-                        menu();
-                        break;
                     }
+                    System.out.print("Tekan Apa Saja Untuk Melanjutkan....");
+                    br.readLine();
+                    
                     break;
                 case 0:
-                    break;
+                    return;
                 default:
                     break;
             }
-            break;
         }
     }
 }
