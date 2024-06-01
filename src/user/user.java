@@ -1,7 +1,14 @@
 package user;
 
+interface iUser{
+    public default void login(){};
+    public int getId();
+    public String getPassword();
+    public String getUsername();
+}
 
-public abstract class user{
+
+public abstract class user implements iUser{
     protected int id;
     protected String username,password;
 
@@ -15,9 +22,6 @@ public abstract class user{
         return true;
     }
     
-    
-    
-    public void logout(){}
     public int getId() {
         return id;
     }

@@ -108,9 +108,6 @@ public class admin extends user {
     }
 
     @Override
-    public void logout(){}
-
-    @Override
     public int getId() {
         return id;
     }
@@ -127,44 +124,6 @@ public class admin extends user {
 
     // ========== crud methods PRODUK ==========
     
-
-    // private static void addProduk()
-    // {
-    //     try {
-    //         String uid = randomUID();
-    //         System.out.print("nama produk : ");
-    //         String nama = br.readLine();
-    //         System.out.print("Jenis produk :");
-    //         String jenis = br.readLine();
-    //         System.out.print("harga : ");
-    //         int harga = Integer.parseInt(br.readLine());
-
-    //         if (harga < 0 || harga == 0){
-    //             System.out.println("harga tidak boleh kurang atau kosong");
-    //             return;
-    //         }
-
-    //         itemEkios items = new itemEkios(uid,nama,jenis,harga);
-
-    //         Class.forName("com.mysql.cj.jdbc.Driver");
-
-    //         Connection con = DriverManager.getConnection(url,user,pass);
-            
-    //         String query = "INSERT INTO tbproduk values('"+items.getIdItem()+"', '"+items.getNamaItem() +"', '"+items.getJenisItem()+"', '"+items.getHargaItem()+"' )";
-
-    //         Statement st = con.createStatement();
-    //         st.executeUpdate(query);
-
-    //         System.out.println("berhasil ditambahkan ke db");
-    //         con.close();
-
-
-
-    //     } catch (Exception e) {
-            
-    //         System.out.println(e);
-    //     }
-    // }
 
     private static void insertKategoriToList() throws Exception
     {
@@ -313,8 +272,6 @@ public class admin extends user {
                 items.add(itm);
 
                 
-                // System.out.println(rs.getString("id_produk"));
-                
             }
             
         } catch (Exception e) {
@@ -390,7 +347,6 @@ public class admin extends user {
                         }
 
                         itm.setNamaItem(nama);
-                        // System.out.println(itm.getNamaItem());
 
                         System.out.println("kategori lama : " + itm.getKategori());
                         
@@ -433,12 +389,6 @@ public class admin extends user {
                             kategori = br.readLine();
                         }
 
-                        // System.out.print("Kategori :");
-                        // String kategori = br.readLine();
-                        // if (kategori.equals("")){
-                        //     throw new IOException();
-                            
-                        // }
                         itm.setKategori(kategori);
 
 
@@ -458,9 +408,7 @@ public class admin extends user {
                                 System.out.println("Inputan Harus Angka!");
                             }
                         }
-                        // System.out.print("harga : ");
-                        // int harga = Integer.parseInt(br.readLine());
-                       
+                      
                         itm.setHargaItem(harga);
                    
                         
@@ -540,9 +488,7 @@ public class admin extends user {
         }
 
     }
-    // ========== EOF - crud methods PRODUK ==========
-
-
+    // ========== EOL - crud methods PRODUK ==========
 
 
     private void managemenAtributEkios() throws Exception
@@ -594,6 +540,7 @@ public class admin extends user {
             
         } catch (Exception e) {
             // TODO: handle exception
+            System.out.println(e);
         }
 
     }
@@ -608,7 +555,6 @@ public class admin extends user {
             Class.forName("com.mysql.cj.jdbc.Driver");
             
             Connection con = DriverManager.getConnection(url,user,pass);
-//            String query = "SELECT * FROM transaksi";
             String query = "SELECT * FROM transaksi INNER JOIN tbuser ON transaksi.id_user = tbuser.id_user INNER JOIN tbproduk ON transaksi.id_produk = tbproduk.id_produk ";
 
             Statement st = con.createStatement();
@@ -662,7 +608,6 @@ public class admin extends user {
             System.out.println("===================================");
 
             while(rs.next()){
-                // data user dimasukkan ke dalam list (nanti)
            
 
                 int id = rs.getInt("id_user");
@@ -683,7 +628,7 @@ public class admin extends user {
 
     }
 
-    public void main(String[] args) throws IOException // hapus static untuk run dari file login.java
+    public void main(String[] args) throws IOException 
     {
         try {
             
@@ -691,9 +636,8 @@ public class admin extends user {
 
             while (true) {
                 
-                // cls();
+                cls();
 
-                System.out.println(randomUID());
                 
                 if (flag){ // cek program berjalan pertama kali
                     System.out.println("Welcome Admin");
@@ -724,10 +668,8 @@ public class admin extends user {
                         melihatRiwayatTransaksi();
 
                         break;
-
-                    case 4 :
-                        // managemenkategori();
-                        break;
+                   
+                       
                     case 0 :
                         System.out.println("good by admin :)");
                         return;
