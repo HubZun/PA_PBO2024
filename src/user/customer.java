@@ -159,7 +159,6 @@ public class customer extends user {
         System.out.println("===========================");
         System.out.println("|      Akun Customer      |");
         System.out.println("===========================");
-        System.out.println("| Id       : " + this.id);
         System.out.println("| Username : " + this.username);
         System.out.println("| Password : " + this.password);
         System.out.println("| Saldo    : " + this.saldo);
@@ -344,7 +343,7 @@ public class customer extends user {
                 if (topup == 99) {
                     break;
                 }
-                String kategori, namaBarang = "", id_produk = "";
+                String kategori, namaBarang = "", jumlah="";
                 String kat = list.get(topup - 1);
                 kategori = kat;
                 Class.forName("com.mysql.cj.jdbc.Driver");
@@ -359,10 +358,9 @@ public class customer extends user {
                 System.out.println("       " + kategori);
                 System.out.println("============================");
                 while (rs.next()) {
-                    String jumlah = rs.getString("jumlah");
+                    jumlah = rs.getString("jumlah");
                     Integer harga = rs.getInt("harga");
                     namaBarang = rs.getString("nama");
-                    id_produk = rs.getString("id_produk");
                     System.out.print("| " + (id += 1) + ".");
                     System.out.print(" " + jumlah);
                     System.out.println("    " + harga);
@@ -405,14 +403,14 @@ public class customer extends user {
                                 
                                 LocalDate myLocalDate = LocalDate.now();
 
-//                                sf.id_transaksi.setText(String.valueOf(idTransaksi));
+//                                sf.lblIdTransaksi.setText(String.valueOf(idTransaksi));
                                 sf.lblTanggal.setText(String.valueOf(myLocalDate));
-                                sf.namaProduk.setText(kategori +" "+ namaBarang);
-                                sf.hargaItem.setText(String.valueOf(harga));
-                                sf.id_produk1.setText(id_produk);
-                                sf.namaUser.setText(getUsername());
-                                sf.ppnHarga.setText(String.valueOf(harga * 10 / 100));
-                                sf.hargaTotal.setText(String.valueOf(harga + (harga * 10 / 100)));
+                                sf.lblIdUser.setText(String.valueOf(getId()));
+                                sf.lblNamaProduk.setText(jumlah +" "+ namaBarang);
+                                sf.lblHargaItem.setText(String.valueOf(harga));
+                                sf.lblNamaUser.setText(getUsername());
+                                sf.lblPpn.setText(String.valueOf(harga * 10 / 100));
+                                sf.lblHargaTotal.setText(String.valueOf(harga + (harga * 10 / 100)));
                                 
                                 
                                 sf.btnConfirm.addActionListener(new ActionListener() {
